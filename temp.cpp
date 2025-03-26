@@ -2,20 +2,12 @@
 
 using namespace std;
 
-int arr[5] = {1,2, 3, 4, 5};
-
-int pop(int *arr, int c = 0) {
-    if (c == 4) {
-        return 5;
-    }
-    cout << c << endl;
-    c++;
-    pop(arr+1, c);
-    return *arr;
-};
-
 int main() {
-    cout << *(&arr[2]) << endl;
-    cout << pop(arr) << endl;
+    int a = 10;
+    int b;
+    b = a;
+    a += 1;
+    cout << "a = " << a << "  b = " << b << endl;
+    cout << "&a = " << &a << "  &b = " << &b << endl;
     return 0;
 }
