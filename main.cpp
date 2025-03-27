@@ -1,71 +1,82 @@
-#include <iostream> 
+#include<iostream>
 
 using namespace std;
-
-//==========================================================
 
 class Stack {
 public:
     int data = -1;
-    Stack *next;   
+    Stack *next;
+    Stack *top = this;
 
-    void push (Stack *s, int data) {
-        // Stack *tmp = new Stack;
-        // tmp->data = data;
-        // tmp->next = s;
-        // s = tmp;
-        // delete tmp;
+    void push(int d) { 
+        Stack *new_s = new Stack;
+        new_s->data = d;
+        new_s->next = top;
+        top = new_s;
     }
 
-    bool is_empty (Stack *s) {
-        return s->data == -1;
+    int peek() {
+        return top->data;
     }
- 
-    int pop (Stack *s) {
-        if (!(s->is_empty(s))) {
-            Stack *tmp = new Stack;
-            cout << s->next->data << endl;
-            tmp->data = s->next->data;
-            tmp->next = s->next->next; 
-            int res = s->data;
-            *s = *tmp;
-            delete tmp;
-            return res;
+
+    bool is_empty() {
+        return top->data == -1;
+    }
+
+    int get_stack_len() {
+        int count = 0;
+        Stack *tmp = new Stack;
+        tmp->top = top;
+        while (!(tmp->is_empty())) {
+            count++;
+            tmp->top = tmp->top->next;
         }
-        return 0;
+        delete tmp;
+        return count;
     }
 
-    int peek (Stack *s) {
-        return s->data;
+    int pop() {
+        int res = top->data;
+        Stack *tmp = top;
+        top = top->next;
+        delete tmp;
+        return res;
     }
-
-    int stack_len (Stack *s, int count = 1) {
-        if (s->data == -1) {
-            return count;
-        }
-        count++;
-        stack_len(s = s->next, count);
-    }
-
 };
 
-//==========================================================
-
-int main() {
+int main()
+{
     Stack t1;
-    cout << " " << endl;
+    cout << t1.get_stack_len() << endl;
 
-    t1.push(&t1, 10);
-    cout << t1.peek(&t1) << endl;
-    t1.push(&t1, 11);
-    cout << t1.peek(&t1) << endl;
-    t1.push(&t1, 12);
-    cout << t1.peek(&t1) << endl;
+    t1.push(10);
+    t1.push(11);
+    t1.push(12);
+    t1.push(13);
+    t1.push(14);
+    t1.push(15);
+    
+    cout << t1.get_stack_len() << endl;
 
+    cout << t1.pop() << endl;
+    cout << t1.peek() << endl;
 
-    cout << t1.pop(&t1) << endl;
-    cout << t1.peek(&t1) << endl;
+    cout << t1.pop() << endl;
+    cout << t1.peek() << endl;
 
-    cout << " " << endl;
+    cout << t1.pop() << endl;
+    cout << t1.peek() << endl;
+
+    cout << t1.pop() << endl;
+    cout << t1.peek() << endl;
+
+    cout << t1.get_stack_len() << endl;
+
+    cout << t1.is_empty() << endl;
+
+    t1.push(22);
+
+    cout << t1.peek() << endl;
+
     return 0;
 }
