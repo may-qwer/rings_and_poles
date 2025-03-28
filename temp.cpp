@@ -2,12 +2,13 @@
 
 using namespace std;
 
+int* tmp(int* arr) {
+    for (int i = 0; i==4; i++) {
+        arr[i]++;
+    }
+    return arr;
+}
+
 int main() {
-    int a = 10;
-    int b;
-    b = a;
-    a += 1;
-    cout << "a = " << a << "  b = " << b << endl;
-    cout << "&a = " << &a << "  &b = " << &b << endl;
-    return 0;
+    cout << 4/2 << endl;
 }
