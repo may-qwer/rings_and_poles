@@ -62,10 +62,6 @@ class Game {
     private: Stack pole_one_main;
     private: Stack pole_two;
     private: Stack pole_three_finish;
-    private: int len_one;
-    private: int len_two;
-    private: int len_three;
-    private: char str[6];
     private: int len_one_str = 12;
     private: int half_len_str_without_sep = 6;
 
@@ -73,81 +69,56 @@ class Game {
         this->pole_one_main = pole_one_main;
         this->pole_two = pole_two;
         this->pole_three_finish = pole_three_finish;
-
-        this->len_one = pole_one_main.get_stack_len();
-        this->len_two = pole_two.get_stack_len();
-        this->len_three = pole_three_finish.get_stack_len();
     }
 
-    private: void print_str(char* str) {
-        cout << " ";
-        for (int i=0; i>len_one_str; i++) { 
+    private: void print_str(char** str) {
+        for (int i=0; i<len_one_str; i++) { 
             cout <<  str[i];
         }
-        cout << " ";
     }
 
-    private: char* add_el_to_str(int data) {
-        char *str[len_one_str];
-        if (data == 0){
-            for (int i=0; i<half_len_str_without_sep; i++) {
+    private: char** add_el_to_str(int data) {
+        char **str = new char*[len_one_str];
+        for (int i=0; i<len_one_str; i++) {
+            //i = 0 1 2 3 4 5 6 7 8 9 10 11 12
+            //str[i]           -|-              
+            //len_one_str = 12;
+            //half_len_str_without_sep = 6;
+            //data = 3
+            if (i < (half_len_str_without_sep - (data-1)/2)) { // i < 6-(3-1)/2; i < 5
+                str[i] = " ";
+            }
+            else if (i < half_len_str_without_sep) { // i < 6
+                str[i] = "=";
+            }
+            else if (i == half_len_str_without_sep) { // i == 6 
+                str[i] = "|";
+            }
+            else if (i > half_len_str_without_sep && i <= (half_len_str_without_sep + (data-1)/2)) { // i > 6 && i <= 6 + 1
+                str[i] = "=";
+            }
+            else if (i > half_len_str_without_sep && i < len_one_str) { // i > 6 && i < 12
                 str[i] = " ";
             }
         }
-        else {
-            cout << "here" << endl;
-            for (int i=0; i<len_one_str; i++) {
-                cout << i << endl;
-                //0 1 2 3 4 5 6 7 8 9 10 11 12
-                //        ----|----              
-                if (i < (half_len_str_without_sep - data)) {
-                    str[i] = " ";
-                }
-                else if (i < half_len_str_without_sep) {
-                    str[i] = "-";
-                }
-                else if (i == half_len_str_without_sep) {
-                    str[i] = "|";
-                }
-                else if (i > half_len_str_without_sep && i < (len_one_str - data)) {
-                    str[i] = "-";
-                }
-                else if (i > half_len_str_without_sep && i < len_one_str) { 
-                    str[i] = " ";
-                }
-            }
-
-
-
-            // for (int i=0; i<(half_len_str_without_sep-data); i++) {
-            //     str[i] = " ";
-            // }
-            // for (int i=data; i<half_len_str_without_sep; i++) {
-            //     str[i] = "-";
-            // }
-            // str[6] = "|";
-            // for (int i=0; i<(half_len_str_without_sep-data); i++) {
-            //     str[i] = "-";
-            // }
-            // for (int i=data; i<half_len_str_without_sep; i++) {
-            //     str[i] = " ";
-            // }
-
-        }
-
+        // }
+        return str;
     }    
+
     public: void show() {
         cout << "\n\n";
-        cout << "=========================================================================";
-        cout << "\n";
+        cout << "---------------------------------------------------------------------";
+        cout << "\n\n";
 
-        print_str(add_el_to_str(0));
-        print_str(add_el_to_str(1));
-        print_str(add_el_to_str(2));
-        print_str(add_el_to_str(3));
-        print_str(add_el_to_str(4));
-
-
+        for (int i=0; i<5; i++) {
+            print_str(add_el_to_str(this->pole_one_main.get_el_by_num(i)));
+            cout << "  ";
+            print_str(add_el_to_str(this->pole_two.get_el_by_num(i)));
+            cout << "  ";
+            print_str(add_el_to_str(this->pole_three_finish.get_el_by_num(i)));
+            cout << "\n";
+        }
+        cout << "\n\n";
     }
 
 
@@ -159,7 +130,7 @@ int main()
     Stack pole_two;
     Stack pole_three_finish;
 
-    for (int i = 11; i<3; i -= 2) {
+    for (int i = 11; i>2; i -= 2) {
         pole_one_main.push(i);
         pole_two.push(0);
         pole_three_finish.push(0);
@@ -167,22 +138,6 @@ int main()
 
     Game game(pole_one_main, pole_two, pole_three_finish);
     game.show();
-
-    //===============================================================================================
-
-    // Stack t1;
-    // t1.push(11); //4
-    // t1.push(9); //3
-    // t1.push(7); //2
-    // t1.push(5); //1 
-    // t1.push(3); //0
-    // cout << "len + " << t1.get_stack_len() << endl;
-    // cout << "el 5 = " << t1.get_el_by_num(5) << endl;
-    // cout << "el 1 = " << t1.get_el_by_num(1) << endl;
-    // cout << "el 20 = " << t1.get_el_by_num(20) << endl;
-    // cout << "el 0 = " << t1.get_el_by_num(0) << endl;
-    // t1.push(20);
-    // cout << t1.pop() << endl;
 
     return 0;
 }
