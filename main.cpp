@@ -103,12 +103,13 @@ class Game {
         }
         // }
         return str;
-    }    
+    }   
 
     public: void show() {
         cout << "\n\n";
         cout << "---------------------------------------------------------------------";
         cout << "\n\n";
+        cout << "      1      " << " " << "      2      " << " " << "      3      " << endl;
 
         for (int i=0; i<5; i++) {
             print_str(add_el_to_str(this->pole_one_main.get_el_by_num(i)));
@@ -121,23 +122,59 @@ class Game {
         cout << "\n\n";
     }
 
+    public: int get_data_from_user() {
+        int user_data;
+        cout << "Enter number of pole: ";
+        cin >> user_data;
+        if (user_data != 1 && user_data != 2 && user_data != 3) {
+            cout << "You enter uncurrent number of pole!\nYou shoud enter '1', '2' or '3'.\nTry again.\n" << endl;
+            user_data = get_data_from_user();
+        }
+        return user_data;
+    
+    }
+
+
+    public: bool can_do_with_poles(int pole_take, int pole_put) {
+        if (pole_take == pole_put) {
+            cout << "You enter identical pole.\nTry again.\n";
+            return false;
+        }
+        return true;
+    }
 
 };
 
 int main()
 {
-    Stack pole_one_main;
-    Stack pole_two;
-    Stack pole_three_finish;
+    bool one_more = true;
 
-    for (int i = 11; i>2; i -= 2) {
-        pole_one_main.push(i);
-        pole_two.push(0);
-        pole_three_finish.push(0);
-    };
+    while (one_more) {
+        Stack pole_one_main;
+        Stack pole_two;
+        Stack pole_three_finish;
+    
+        for (int i = 11; i>2; i -= 2) {
+            pole_one_main.push(i);
+            pole_two.push(0);
+            pole_three_finish.push(0);
+        };
+    
+        Game game(pole_one_main, pole_two, pole_three_finish);
 
-    Game game(pole_one_main, pole_two, pole_three_finish);
-    game.show();
+        bool running = true;
+
+        while (running) {
+            game.show();
+            int pole_take;
+            int pole_put;
+            do {
+                pole_take = game.get_data_from_user();
+                pole_put = game.get_data_from_user();    
+            } while (game.can_do_with_poles(pole_take, pole_put));           
+        }
+
+    }
 
     return 0;
 }

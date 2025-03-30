@@ -2,38 +2,24 @@
 
 using namespace std;
 
-void print_str(char** str) {
-    cout << "el 0: '" << str[0] << "'" << endl;
-    cout << "el 1: '" << str[1] << "'" << endl;
-    cout << "el 2: '" << str[2] << "'" << endl;
-    cout << "el 3: '" << str[3] << "'" << endl;
-    cout << "el 4: '" << str[4] << "'" << endl;
-    cout << "el 5: '" << str[5] << "'" << endl;
-    cout << "el 6: '" << str[6] << "'" << endl;
-    cout << "el 7: '" << str[7] << "'" << endl;
-    cout << "el 8: '" << str[8] << "'" << endl;
-    cout << "el 9: '" << str[9] << "'" << endl;
-    cout << "el 10: '" << str[10] << "'" << endl;
-}
-
-char **create_str() {
-    char **str = new char*[11];
-    str[0] = "0";
-    str[1] = "1";
-    str[2] = "2";
-    str[3] = "3";
-    str[4] = "4";
-    str[5] = "5";
-    str[6] = "6";
-    str[7] = "7";
-    str[8] = "8";
-    str[9] = "9";
-    str[10] = "0";
-    return str;
+int get_data_from_user() {
+    int user_data;
+    cout << "Enter number of pole: ";
+    cin >> user_data;
+    if (user_data != 1 && user_data != 2 && user_data != 3) {
+        cout << "You enter uncurrent number of pole!\nYou shoud enter '1', '2' or '3'.\nTry again.\n" << endl;
+        user_data = get_data_from_user();
+    }
+    return user_data;
 
 }
+
 
 int main() {
-    char **str = create_str();
-    print_str(str);
+    int ud;
+    ud = get_data_from_user();
+    cout << ud << endl;
+
+
+    return 0;
 }
