@@ -43,8 +43,8 @@ class Stack {
     }
 
     public: int get_el_by_num(int num) {
-        if (num > get_stack_len()) {
-            return -2;
+        if (num >= get_stack_len()) {
+            return 0;
         }
         int res = 0;
         Stack *tmp = new Stack;
@@ -111,7 +111,7 @@ class Game {
         cout << "\n\n";
         cout << "      1      " << " " << "      2      " << " " << "      3      " << endl;
 
-        for (int i=0; i<5; i++) {
+        for (int i=4; i>-1; i--) {
             print_str(add_el_to_str(this->pole_one_main.get_el_by_num(i)));
             cout << "  ";
             print_str(add_el_to_str(this->pole_two.get_el_by_num(i)));
@@ -143,7 +143,56 @@ class Game {
         return true;
     }
 
-};
+
+    private: Stack* set_pole(int pole) {
+        if (pole == 1) {
+            return &pole_one_main;
+        }
+        else if (pole == 2) {
+            return &pole_two;
+        }
+        else {
+            return &pole_three_finish;
+        }
+    } 
+
+    public: bool compare_top_of_pole(int pole_take, int pole_put) {
+        Stack* pts = set_pole(pole_take);
+        Stack* pps = set_pole(pole_put);
+        cout << "You can't move greater ring to less ring. Try again.\n" << endl;
+        cout << pps->peek() << pts->peek() << (pps->peek() < pts->peek()) << endl;
+        if (pps->peek() < pts->peek()){
+            return false;
+        }
+        return true;
+    }
+
+    public: void push_pop_poles(int pole_take, int pole_put) {
+        Stack* pts = set_pole(pole_take);
+        Stack* pps = set_pole(pole_put);
+        int put_data = pts->pop();
+        pps->push(put_data);
+    }
+
+    public: bool is_win() {
+        if (pole_one_main.get_stack_len() == 0 && pole_three_finish.get_stack_len() == 5) {
+            return false;
+        }
+        return true;
+    }
+
+    public: bool one_more_que() {
+        cout << "\nWould you like to play one more game?(Y/n)";
+        char *ans;
+        cin >> ans;
+        if (ans == "Y" || ans == "y") {
+            return true;
+        }
+        return false;
+    }
+
+ };
+
 
 int main()
 {
@@ -154,10 +203,10 @@ int main()
         Stack pole_two;
         Stack pole_three_finish;
     
-        for (int i = 11; i>2; i -= 2) {
+        for (int i = 3; i<12; i += 2) {
             pole_one_main.push(i);
-            pole_two.push(0);
-            pole_three_finish.push(0);
+            // pole_two.push(0);
+            // pole_three_finish.push(0);
         };
     
         Game game(pole_one_main, pole_two, pole_three_finish);
@@ -171,9 +220,12 @@ int main()
             do {
                 pole_take = game.get_data_from_user();
                 pole_put = game.get_data_from_user();    
-            } while (game.can_do_with_poles(pole_take, pole_put));           
+            } while (game.can_do_with_poles(pole_take, pole_put) && game.compare_top_of_pole(pole_take, pole_put));    
+            
+            game.push_pop_poles(pole_take, pole_put);
+            running = game.is_win();
         }
-
+        one_more = game.one_more_que();
     }
 
     return 0;

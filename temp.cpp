@@ -2,23 +2,25 @@
 
 using namespace std;
 
-int get_data_from_user() {
-    int user_data;
-    cout << "Enter number of pole: ";
-    cin >> user_data;
-    if (user_data != 1 && user_data != 2 && user_data != 3) {
-        cout << "You enter uncurrent number of pole!\nYou shoud enter '1', '2' or '3'.\nTry again.\n" << endl;
-        user_data = get_data_from_user();
-    }
-    return user_data;
+class Tmp {
+    int data = 3;
 
-}
+};
+
+class T {
+    Tmp tmp;
+
+    void tmp_def() {
+        Tmp *ttmp = &tmp;
+        ttmp->data++;
+        cout << 
+    }
+};
 
 
 int main() {
-    int ud;
-    ud = get_data_from_user();
-    cout << ud << endl;
+    Tmp t = ret_tmp();
+    cout << &t << endl;
 
 
     return 0;
