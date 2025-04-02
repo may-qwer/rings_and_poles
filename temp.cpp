@@ -1,61 +1,75 @@
-    #include <iostream>
+#include <iostream>
 
 using namespace std;
 
 class Note {
     public: int data;
-    public: Note *next = nullptr;
-    public: Note *prev = nullptr;
+    public: Note *next;
+    public: Note *prev;
 };
 
 class Queue {
     public: Note *top;
     public: Note *bot;
-    public: int len = 0;
+
+    Queue() {
+        top = new Note;
+        top->data = 0;
+        top->prev = nullptr;
+        bot = new Note;
+        bot->data = -1;
+        bot->next = nullptr;
+        top->next = bot;
+        bot->prev = top;        
+        cout << "top = " << top << " bot = " << bot << endl;
+        
+    }
+
+
+    public: int get_queue_len() {
+        Note *tmp = new Note;
+        int len = 0;
+        tmp = top->next;
+        while (tmp != bot) {
+            len++;
+            tmp = tmp->next;
+        }
+        delete tmp;
+        return len;
+    }
 
     public: void push(int d) {
         Note *new_n = new Note;
         new_n->data = d;
-        new_n->next = top;
-        new_n->next->prev = new_n;
-        top = new_n;
-        if (len == 0) {
-            bot = new_n;
+        new_n->next = top->next;
+        top->next = new_n;
+        new_n->prev = top;
+        if (is_empty()) {
+            bot->prev = new_n;
         }
-        len++;
     }
 
     public: int peek() {
-        return bot->data;
+        return bot->prev->data;
     }
 
     public: bool is_empty () {
-        return len == 0;
-    }
-
-    public: int get_queue_len() {
-        return len;
+        return get_queue_len() == 0;
     }
 
     public: int pop () {
-        if (len == 0) {
-            return -1;
-        }
-        int res = bot->data;
+        int res = 0;
         Note *tmp = bot->prev;
         bot->prev = bot->prev->prev;
+        res = tmp->data;
         delete tmp;
-        len--;
         return res;
     }
 
     public: int get_el_by_num(int num) {
-        if (num >= len) {
-            return 0;
-        }
         int res = 0;
         Note *tmp = new Note;
-        tmp = top;
+        tmp = top->next;
         for (int i = 0; i<num; i++) {
             tmp = tmp->next;
         }
@@ -67,6 +81,7 @@ class Queue {
 
 int main() {
     Queue t1;
+    cout << &t1 << endl;
 
     t1.push(10);
     t1.push(11);
@@ -75,15 +90,7 @@ int main() {
     t1.push(14);
     t1.push(15);
 
-    cout << t1.top->data << t1.top->next->data << t1.top->next->next->data << t1.top->next->next->next->data << t1.top->next->next->next->next->data << t1.top->next->next->next->next->next->data  << t1.top->next->next->next->next->next->next->data  <<t1.top->next->next->next->next->next->next->data  << endl;
-    cout << t1.bot->data << t1.bot->prev->data << t1.bot->prev->prev->data << t1.bot->prev->prev->prev->data << t1.bot->prev->prev->prev->prev->data << t1.bot->prev->prev->prev->prev->prev->data << endl;//  << t1.bot->prev->prev->prev->prev->prev->prev->data  <<t1.bot->prev->prev->prev->prev->prev->prev->data  << endl;
-
-    // cout << t1.get_el_by_num(0) << endl;
-    // cout << t1.get_el_by_num(1) << endl;
-    // cout << t1.get_el_by_num(2) << endl;
-    // cout << t1.get_el_by_num(3) << endl;
-    // cout << t1.get_el_by_num(4) << endl;
-    // cout << t1.get_el_by_num(5) << endl;
+    cout << t1.top->data << " " << t1.top->next << " " << t1.top->next->data << endl;
 
 
     return 0;
