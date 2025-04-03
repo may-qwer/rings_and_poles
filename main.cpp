@@ -1,70 +1,95 @@
 #include <iostream>
+// #include "./class/Stack.h"
+// #include "./class/Queue.h"
+
 using namespace std;
 
-class Stack {
-    public: int data = -1;
-    public: Stack *next;
-    public: Stack *top = this;
+class Note {
+    public: int data;
+    public: Note *next;
+    public: Note *prev;
+};
 
-    public: void push(int d) { 
-        Stack *new_s = new Stack;
-        new_s->data = d;
-        new_s->next = top;
-        top = new_s;
+class Queue {
+    public: Note *top;
+    public: Note *bot;
+
+    Queue() {
+        top = new Note;
+        top->data = 0;
+        top->prev = nullptr;
+        bot = new Note;
+        bot->data = -1;
+        bot->next = nullptr;
+        top->next = bot;
+        bot->prev = top;        
+    }
+
+
+    public: int get_queue_len() {
+        Note *tmp = new Note;
+        int len = 0;
+        tmp = top->next;
+        while (tmp != bot) {
+            len++;
+            tmp = tmp->next;
+        }
+        tmp = nullptr;
+        delete tmp;
+        return len;
+    }
+
+    public: void push(int d) {
+        Note *new_n = new Note;
+        if (is_empty()) {
+            bot->prev = new_n;
+        }
+        new_n->data = d;
+        new_n->next = top->next;
+        new_n->prev = top;
+        new_n->next->prev = new_n;
+        top->next = new_n;
     }
 
     public: int peek() {
-        return top->data;
+        return bot->prev->data;
     }
 
-    public: bool is_empty() {
-        return top->data == -1;
+    public: bool is_empty () {
+        return get_queue_len() == 0;
     }
 
-    public: int get_stack_len() {
-        int count = 0;
-        Stack *tmp = new Stack;
-        tmp->top = top;
-        while (!(tmp->is_empty())) {
-            count++;
-            tmp->top = tmp->top->next;
-        }
-        delete tmp;
-        return count;
-    }
-
-    public: int pop() {
-        int res = top->data;
-        Stack *tmp = top;
-        top = top->next;
+    public: int pop () {
+        int res = 0;
+        Note *tmp = bot->prev;
+        bot->prev = bot->prev->prev;
+        res = tmp->data;
         delete tmp;
         return res;
     }
 
     public: int get_el_by_num(int num) {
-        if (num >= get_stack_len()) {
-            return 0;
-        }
         int res = 0;
-        Stack *tmp = new Stack;
-        tmp->top = top;
+        Note *tmp = new Note;
+        tmp = top->next;
         for (int i = 0; i<num; i++) {
-            tmp->top = tmp->top->next;
+            tmp = tmp->next;
         }
-        res = tmp->top->data;
+        res = tmp->data;
+        tmp = nullptr;
         delete tmp;
         return res;
     }
 };
 
 class Game {
-    private: Stack pole_one_main;
-    private: Stack pole_two;
-    private: Stack pole_three_finish;
+    private: Queue pole_one_main;
+    private: Queue pole_two;
+    private: Queue pole_three_finish;
     private: int len_one_str = 12;
     private: int half_len_str_without_sep = 6;
 
-    public: Game (Stack pole_one_main, Stack pole_two, Stack pole_three_finish) {
+    public: Game (Queue pole_one_main, Queue pole_two, Queue pole_three_finish) {
         this->pole_one_main = pole_one_main;
         this->pole_two = pole_two;
         this->pole_three_finish = pole_three_finish;
@@ -143,7 +168,7 @@ class Game {
     }
 
 
-    private: Stack* set_pole(int pole) {
+    private: Queue* set_pole(int pole) {
         if (pole == 1) {
             return &pole_one_main;
         }
@@ -156,8 +181,8 @@ class Game {
     } 
 
     public: bool compare_top_of_pole(int pole_take, int pole_put) {
-        Stack* pts = set_pole(pole_take);
-        Stack* pps = set_pole(pole_put);
+        Queue* pts = set_pole(pole_take);
+        Queue* pps = set_pole(pole_put);
         cout << "You can't move greater ring to less ring. Try again.\n" << endl;
         cout << pps->peek() << pts->peek() << (pps->peek() < pts->peek()) << endl;
         if (pps->peek() < pts->peek()){
@@ -167,14 +192,14 @@ class Game {
     }
 
     public: void push_pop_poles(int pole_take, int pole_put) {
-        Stack* pts = set_pole(pole_take);
-        Stack* pps = set_pole(pole_put);
+        Queue* pts = set_pole(pole_take);
+        Queue* pps = set_pole(pole_put);
         int put_data = pts->pop();
         pps->push(put_data);
     }
 
     public: bool is_win() {
-        if (pole_one_main.get_stack_len() == 0 && pole_three_finish.get_stack_len() == 5) {
+        if (pole_one_main.get_queue_len() == 0 && pole_three_finish.get_queue_len() == 5) {
             return false;
         }
         return true;
@@ -198,9 +223,9 @@ int main()
     bool one_more = true;
 
     while (one_more) {
-        Stack pole_one_main;
-        Stack pole_two;
-        Stack pole_three_finish;
+        Queue pole_one_main;
+        Queue pole_two;
+        Queue pole_three_finish;
     
         for (int i = 3; i<12; i += 2) {
             pole_one_main.push(i);
