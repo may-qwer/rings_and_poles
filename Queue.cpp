@@ -1,5 +1,6 @@
 #include "Queue.h"
 
+
 Queue::Queue() {
     top = new Note;
     top->data = 0;
@@ -48,12 +49,16 @@ int Queue::pop () {
     int res = 0;
     Note *tmp = bot->prev;
     bot->prev = bot->prev->prev;
+    bot->prev->next = bot;
     res = tmp->data;
     delete tmp;
     return res;
 }
 
 int Queue::get_el_by_num(int num) {
+    if (num >= get_queue_len()) {
+        return 0;
+    }
     int res = 0;
     Note *tmp = new Note;
     tmp = top->next;
