@@ -1,13 +1,13 @@
-#include "Queue.h"
+#include "dl_list.h"
 
 class Game {
-    private: Queue pole_one_main;
-    private: Queue pole_two;
-    private: Queue pole_three_finish;
+    private: Dl_list pole_one_main;
+    private: Dl_list pole_two;
+    private: Dl_list pole_three_finish;
     private: int len_one_str = 12;
     private: int half_len_str_without_sep = 6;
 
-    public: Game (Queue pole_one_main, Queue pole_two, Queue pole_three_finish);
+    public: Game (Dl_list pole_one_main, Dl_list pole_two, Dl_list pole_three_finish);
 
     private: void print_str(char** str);
 
@@ -19,7 +19,7 @@ class Game {
 
     public: bool can_do_with_poles(int pole_take, int pole_put);
 
-    private: Queue* set_pole(int pole);
+    private: Dl_list* set_pole(int pole);
 
     public: bool compare_top_of_pole(int pole_take, int pole_put);
 

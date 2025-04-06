@@ -1,10 +1,10 @@
 #include "Game.h"
-#include "Queue.h"
+#include "dl_list.h"
 #include <iostream>
 using namespace std; 
 
 
-Game::Game (Queue pole_one_main, Queue pole_two, Queue pole_three_finish) {
+Game::Game (Dl_list pole_one_main, Dl_list pole_two, Dl_list pole_three_finish) {
     this->pole_one_main = pole_one_main;
     this->pole_two = pole_two;
     this->pole_three_finish = pole_three_finish;
@@ -50,12 +50,12 @@ void Game::show() {
     cout << "\n\n";
     cout << "      1      " << " " << "      2      " << " " << "      3      " << endl;
 
-    for (int i=4; i>-1; i--) {
-        print_str(add_el_to_str(this->pole_one_main.get_el_by_num(i)));
+    for (int i=0; i<5; i++) {
+        print_str(add_el_to_str(this->pole_one_main.get_el_by_num_top(i)));
         cout << "  ";
-        print_str(add_el_to_str(this->pole_two.get_el_by_num(i)));
+        print_str(add_el_to_str(this->pole_two.get_el_by_num_top(i)));
         cout << "  ";
-        print_str(add_el_to_str(this->pole_three_finish.get_el_by_num(i)));
+        print_str(add_el_to_str(this->pole_three_finish.get_el_by_num_top(i)));
         cout << "\n";
     }
     cout << "\n\n";
@@ -74,8 +74,8 @@ int Game::get_data_from_user() {
 }
 
 
-bool Game::can_do_with_poles(int pole_take, int pole_put) {
-    if (pole_take == pole_put) {
+bool Game::can_do_with_poles(int pole_get, int pole_set) {
+    if (pole_get == pole_set) {
         cout << "You enter identical pole.\nTry again.\n";
         return false;
     }
@@ -83,7 +83,7 @@ bool Game::can_do_with_poles(int pole_take, int pole_put) {
 }
 
 
-Queue* Game::set_pole(int pole) {
+Dl_list* Game::set_pole(int pole) {
     if (pole == 1) {
         return &pole_one_main;
     }
@@ -95,24 +95,24 @@ Queue* Game::set_pole(int pole) {
     }
 } 
 
-bool Game::compare_top_of_pole(int pole_take, int pole_put) {
-    Queue* ptq = set_pole(pole_take);
-    Queue* ppq = set_pole(pole_put);
-    if (ppq->peek() < ptq->peek()){
+bool Game::compare_top_of_pole(int pole_get, int pole_set) {
+    Dl_list* pg_dll = set_pole(pole_get);
+    Dl_list* ps_dll = set_pole(pole_set);
+    if ((pg_dll->peek_top() < ps_dll->peek_top()) || ((pg_dll->peek_top() > ps_dll->peek_top()) && ps_dll->peek_top() == 0)){
         return false;
     }
     cout << "You can't move greater ring to less ring. Try again.\n" << endl;
     return true;
 }
 
-void Game::push_pop_poles(int pole_take, int pole_put) {
-    Queue* ptq = set_pole(pole_take);
-    Queue* ppq = set_pole(pole_put);
-    ppq->push(ptq->pop());
+void Game::push_pop_poles(int pole_get, int pole_set) {
+    Dl_list* pg_dll = set_pole(pole_get);
+    Dl_list* ps_dll = set_pole(pole_set);
+    ps_dll->add_bot(pg_dll->get_top());
 }
 
 bool Game::is_win() {
-    if (pole_one_main.get_queue_len() == 0 && pole_three_finish.get_queue_len() == 5) {
+    if (pole_one_main.get_dll_len() == 0 && pole_three_finish.get_dll_len() == 5) {
         return false;
     }
     return true;
