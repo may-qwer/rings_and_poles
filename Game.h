@@ -1,4 +1,6 @@
 #include "dl_list.h"
+#ifndef GAME_H
+#define GAME_H
 
 class Game {
     private: Dl_list pole_one_main;
@@ -29,3 +31,5 @@ class Game {
 
     public: bool one_more_que();
  };
+
+ #endif

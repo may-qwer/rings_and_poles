@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "dl_list.h"
 #include <iostream>
+#include <stdio.h>
 using namespace std; 
 
 
@@ -50,7 +51,7 @@ void Game::show() {
     cout << "\n\n";
     cout << "      1      " << " " << "      2      " << " " << "      3      " << endl;
 
-    for (int i=0; i<5; i++) {
+    for (int i=4; i>-1; i--) {
         print_str(add_el_to_str(this->pole_one_main.get_el_by_num_top(i)));
         cout << "  ";
         print_str(add_el_to_str(this->pole_two.get_el_by_num_top(i)));
@@ -66,7 +67,7 @@ int Game::get_data_from_user() {
     cout << "Enter number of pole: ";
     cin >> user_data;
     if (user_data != 1 && user_data != 2 && user_data != 3) {
-        cout << "You enter uncurrent number of pole!\nYou shoud enter '1', '2' or '3'.\nTry again.\n" << endl;
+        cout << "\033[31mYou enter uncurrent number of pole!\nYou shoud enter '1', '2' or '3'.\033[0m\nTry again.\n" << endl;
         user_data = get_data_from_user();
     }
     return user_data;
@@ -76,7 +77,7 @@ int Game::get_data_from_user() {
 
 bool Game::can_do_with_poles(int pole_get, int pole_set) {
     if (pole_get == pole_set) {
-        cout << "You enter identical pole.\nTry again.\n";
+        cout << "\033[31mYou enter identical pole.\033[0m\nTry again.\n";
         return false;
     }
     return true;
@@ -98,17 +99,19 @@ Dl_list* Game::set_pole(int pole) {
 bool Game::compare_top_of_pole(int pole_get, int pole_set) {
     Dl_list* pg_dll = set_pole(pole_get);
     Dl_list* ps_dll = set_pole(pole_set);
-    if ((pg_dll->peek_top() < ps_dll->peek_top()) || ((pg_dll->peek_top() > ps_dll->peek_top()) && ps_dll->peek_top() == 0)){
+    int g = pg_dll->peek_bot();
+    int s = ps_dll->peek_bot();
+    if ((pg_dll->peek_bot() < ps_dll->peek_bot()) || (ps_dll->peek_bot() == 0)){
         return false;
     }
-    cout << "You can't move greater ring to less ring. Try again.\n" << endl;
+    cout << "\033[31mYou can't move greater ring to less ring.\033[0m\nTry again.\n" << endl;
     return true;
 }
 
 void Game::push_pop_poles(int pole_get, int pole_set) {
     Dl_list* pg_dll = set_pole(pole_get);
     Dl_list* ps_dll = set_pole(pole_set);
-    ps_dll->add_bot(pg_dll->get_top());
+    ps_dll->add_bot(pg_dll->get_bot());
 }
 
 bool Game::is_win() {
@@ -119,10 +122,14 @@ bool Game::is_win() {
 }
 
 bool Game::one_more_que() {
+    cout << 
+    "\nYou WIN!!! \033[31mC\033[32mO\033[33mN\033[34mG\033[35mR\033[36mA\033[31mT\033[32mU\033[33mL\033[34mA\033[35mT\033[36mI\033[31mO\033[32mN\033[33m!\033[34m!\033[35m!\033[0m\n"
+     << endl;
     cout << "\nWould you like to play one more game?(Y/n)";
-    char *ans;
+    char ans;
     cin >> ans;
-    if (ans == "Y" || ans == "y") {
+    cout << ans << " " << &ans << " " << endl;
+    if (ans == 89/*Y*/ || ans == 121/*y*/) {
         return true;
     }
     return false;

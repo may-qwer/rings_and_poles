@@ -1,7 +1,9 @@
-#include "Queue.h"
+#include "note.h"
+#ifndef DL_LIST_H
+#define DL_LIST_H
+
 
 class Dl_list {
-    public:
     public: Note *top;
     public: Note *bot;
 
@@ -28,3 +30,5 @@ class Dl_list {
     int get_el_by_num_bot(int num);
 
 };
+
+#endif

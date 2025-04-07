@@ -1,3 +1,6 @@
+#ifndef STACK_H
+#define STACK_H
+
 class Stack {
     public: int data = -1;
     public: Stack *next;
@@ -15,3 +18,5 @@ class Stack {
 
     public: int get_el_by_num(int num);
 };
+
+#endif

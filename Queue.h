@@ -1,11 +1,8 @@
+#include "note.h"
 #ifndef QUEUE_H
 #define QUEUE_H
 
-class Note {
-    public: int data;
-    public: Note *next;
-    public: Note *prev;
-};
+
 
 class Queue {
     public: Note *top;

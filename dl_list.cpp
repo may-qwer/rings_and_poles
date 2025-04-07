@@ -1,4 +1,5 @@
 #include "dl_list.h"
+#include "note.h"
 
 Dl_list::Dl_list() {
     top = new Note;
